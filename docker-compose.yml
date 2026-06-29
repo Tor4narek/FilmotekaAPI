@@ -50,7 +50,7 @@ services:
 
   frontend:
     build:
-      context: /opt/filmoteka-front
+      context: /opt/filmoteka
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
