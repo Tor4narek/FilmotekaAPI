@@ -19,31 +19,12 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          envs: POSTGRES_DB,POSTGRES_USER,POSTGRES_PASSWORD,KINOPOISK_API_KEY,JWT_SECRET
           script: |
             set -e
             cd /opt/filmoteka
             git pull origin main
 
-            # Generate .env from secrets
-            cat > .env <<EOF
-            POSTGRES_DB=${{ secrets.POSTGRES_DB }}
-            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-
-            ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=${{ secrets.POSTGRES_DB }};Username=${{ secrets.POSTGRES_USER }};Password=${{ secrets.POSTGRES_PASSWORD }}
-            ConnectionStrings__Redis=redis:6379
-
-            Kinopoisk__ApiKey=${{ secrets.KINOPOISK_API_KEY }}
-
-            Jwt__Secret=${{ secrets.JWT_SECRET }}
-            Jwt__Issuer=filmoteka-api
-            Jwt__Audience=filmoteka-client
-            Jwt__AccessTokenExpiryMinutes=15
-            Jwt__RefreshTokenExpiryDays=7
-
-            Puppeteer__ExecutablePath=/usr/bin/chromium
-            EOF
+            printf '%s' '${{ secrets.ENV_FILE }}' > .env
 
             docker compose build --no-cache api
             docker compose up -d --remove-orphans
