@@ -26,7 +26,7 @@ jobs:
 
             printf '%s' '${{ secrets.ENV_FILE }}' > .env
 
-            docker compose build --no-cache api
+            docker compose build api
             docker compose up -d --remove-orphans
             sleep 8
             docker compose ps
