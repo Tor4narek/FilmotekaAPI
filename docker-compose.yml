@@ -48,6 +48,14 @@ services:
       retries: 10
     restart: unless-stopped
 
+  frontend:
+    build:
+      context: /opt/filmoteka-front
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
 volumes:
   pg_data:
   redis_data:
